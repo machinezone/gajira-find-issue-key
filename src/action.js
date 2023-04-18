@@ -234,13 +234,15 @@ export default class Action {
             /(?:^|[ [])*(?<=^|[a-z]-|[\s&P[\]^cnptu{}\-])([A-Za-z]\w*[ \-]\d+)(?![^\W_])[ ,:[\]|\-]*(?<title>.*)$/;
 
           const { groups } = newTitle.match(re) || {};
+          let titleString = newTitle;
           if (groups) {
             logger.info(`The title match found: ${YAML.stringify(groups)}`);
-            const titleString = titleCasePipe(replace(trim(groups.title), /\s+/g, ' '));
-            newTitle = `${join(issueKeys, ',')}: ${titleString}`.slice(0, 71);
-            logger.debug(`Revised PR Title: ${newTitle}`);
-            setOutput('title', `${titleString}`);
+            titleString = titleCasePipe(replace(trim(groups.title), /\s+/g, ' '));
           }
+          
+          newTitle = `${join(issueKeys, ',')}: ${titleString}`.slice(0, 71);
+          logger.debug(`Revised PR Title: ${newTitle}`);
+          setOutput('title', `${titleString}`);
         } catch (error) {
           logger.warning(error);
         }
@@ -465,6 +467,13 @@ export default class Action {
       logger.debug(`Pull request title is: ${pullRequest?.title}`);
       setOutput('title_issues', Action.setToCommaDelimitedString(titleSet));
     }
+
+    const branchSet = (await this.findIssueKeyIn(pullRequest?.head.ref)).map(jio => jio.key);
+    if (pullRequest?.head.ref) {
+      logger.debug(`Pull request branchname is: ${pullRequest?.head.ref}`);
+      setOutput('branchname_issues', Action.setToCommaDelimitedString(branchSet));
+    }
+
     const commitSet = new Set();
     const referenceSet = new Set();
     if (this.baseRef && this.headRef) {
@@ -503,7 +512,7 @@ export default class Action {
       setOutput('commit_issues', Action.setToCommaDelimitedString(commitSet));
     }
     /** @type string[] */
-    const combinedArray = [...new Set([...stringSet, ...titleSet, ...referenceSet, ...commitSet].flat())];
+    const combinedArray = [...new Set([...stringSet, ...branchSet, ...titleSet, ...referenceSet, ...commitSet].flat())];
     /** @type {Promise<number[]>[]} */
     const ghResults = [];
     /** @type {Promise<JiraIssueObject>[]} */
@@ -669,7 +678,7 @@ export default class Action {
     let issues = [];
     if (isString(searchString)) {
       if (!searchString) {
-        logger.info(`no issues found in ${this.argv.from}`);
+        logger.info(`no issues found in ${searchString}`);
         return issues;
       }
       const match = searchString.match(issueIdRegEx);
