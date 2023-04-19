@@ -261,6 +261,9 @@ export default class Action {
   }
 
   async createOrUpdateGHIssues(issueKey, issueTitle, issueBody, issueAssignee = [], milestoneNumber = -1) {
+    if (!this.argv.GitHubIssues && !this.argv.GitHubMilestones) {
+      return;
+    }
     logger.debug(`Getting list of issues`);
     /** @type {number[]} */
     const issueNumbers = [];
