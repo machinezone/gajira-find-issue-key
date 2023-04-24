@@ -230,9 +230,7 @@ export default class Action {
 
       if (issueKeys.length > 0) {
         try {
-          const re =
-            /(?:^|[ [])*(?<=^|[a-z]-|[\s&P[\]^cnptu{}\-])([A-Za-z]\w*[ \-]\d+)(?![^\W_])[ ,:[\]|\-]*(?<title>.*)$/;
-
+          const re = /^(?<keys>(?:[\[\s]*\b[A-Z][A-Z_0-9]{1,9}-[0-9]{1,9}\b[\], :-])*)(?<title>.*)$/;
           const { groups } = newTitle.match(re) || {};
           let titleString = newTitle;
           if (groups) {
@@ -240,7 +238,7 @@ export default class Action {
             titleString = titleCasePipe(replace(trim(groups.title), /\s+/g, ' '));
           }
           
-          newTitle = `${join(issueKeys, ',')}: ${titleString}`.slice(0, 71);
+          newTitle = `${join(issueKeys, ',')}: ${titleString}`.slice(0, 120);
           logger.debug(`Revised PR Title: ${newTitle}`);
           setOutput('title', `${titleString}`);
         } catch (error) {
@@ -410,7 +408,7 @@ export default class Action {
   getIssueSetFromString(string1, _set) {
     const set = isSet(_set) ? _set : new Set();
     if (isString(string1)) {
-      const match = string1.match(strictIssueIdRegEx);
+      const match = string1.match(issueIdRegEx);
 
       if (match) {
         for (const issueKey of match) {
