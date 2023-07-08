@@ -152,6 +152,10 @@ inputs:
       The Jira cloud user api token
       or use environment variable JIRA_API_TOKEN
     required: false
+  fail-on-error:
+    description: >
+      If a candidate JIRA ticket fails loopup, should the action fail?
+    required: false
 outputs:
   issue:
     description: Key of the found issue
