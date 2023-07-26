@@ -1,6 +1,6 @@
 {
   "name": "gajira-find-issue-key",
-  "version": "2.4.15-alpha",
+  "version": "2.4.23",
   "description": "",
   "main": "lib/index.cjs",
   "type": "module",
@@ -160,6 +160,5 @@
     "*.{yml,json}": "yarn exec prettier --write",
     "{src,__tests__}/**/*.js": "yarn exec eslint --cache --fix"
   },
-  "packageManager": "yarn@3.3.0",
-  "stableVersion": "2.4.22"
+  "packageManager": "yarn@3.3.0"
 }
