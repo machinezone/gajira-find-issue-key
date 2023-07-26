@@ -235,7 +235,7 @@ export default class Action {
           let titleString = newTitle;
           if (groups) {
             logger.info(`The title match found: ${YAML.stringify(groups)}`);
-            titleString = titleCasePipe(replace(trim(groups.title), /\s+/g, ' '));
+            titleString = replace(trim(groups.title), /\s+/g, ' ');
           }
           
           newTitle = `${join(issueKeys, ',')}: ${titleString}`.slice(0, 120);
