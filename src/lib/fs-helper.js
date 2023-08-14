@@ -115,7 +115,9 @@ export function mkdir(filepath, isFile = false) {
     throw new Error(emptyArgumentPath);
   }
   const directory = isFile ? path.dirname(filepath) : filepath;
-
+  if (fs.existsSync(directory)){
+    return
+  }
   fs.mkdir(directory, { recursive: true }, (error) => {
     if (error) {
       logger.error(error);

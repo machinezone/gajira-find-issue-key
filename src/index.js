@@ -34,8 +34,8 @@ export async function writeKey(result) {
   logger.debug(`Saving ${issue.key} to ${cliConfigPath}`);
   logger.debug(`Saving ${issue.key} to ${configPath}`);
 
-  fsHelper.mkdir(configPath);
-  fsHelper.mkdir(cliConfigPath);
+  fsHelper.mkdir(configPath, isFile = true);
+  fsHelper.mkdir(cliConfigPath,  isFile = true);
   try {
     // Expose created issue's key as an output
     if (fsHelper.existsSync(configPath)) {
