@@ -27,7 +27,7 @@ const unicodeWordMatch =
 // eslint-disable-next-line no-useless-escape
 // Default project key limit is 10
 // pick a reasonably long id limit 9, to avoid misinterpreting things like epoch time (10 digits)
-export const strictIssueIdRegEx = /\b[A-Z][A-Z_0-9]{1,9}-[0-9]{1,9}\b/;
+export const strictIssueIdRegEx = /\b[A-Za-z][A-Za-z_0-9]{1,9}-[0-9]{1,9}\b/;
 export const issueIdRegEx = new RegExp(strictIssueIdRegEx, "g");
 
 export const GetStartAndEndPoints = `
